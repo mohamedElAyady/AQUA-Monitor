@@ -46,8 +46,9 @@
     }
     .camera-feed {
         width: 100%;
-        height: 100%;
+        height: auto;
         display: block;
+        border-radius: 8px;
     }
     .loading-indicator {
         position: absolute;
@@ -143,10 +144,10 @@
     </div>
 
     <div class="camera-container">
-        <!-- Camera Feed Canvas -->
+        <!-- Camera Feed from Raspberry Pi -->
         <div class="feed-wrapper">
-            <canvas id="cameraCanvas" class="camera-feed"></canvas>
-            <div class="loading-indicator" id="loadingIndicator">
+            <img id="cameraFeed" src="{{ pi_stream_url }}" alt="Live Camera Feed" class="camera-feed" />
+            <div class="loading-indicator" id="loadingIndicator" style="display: none;">
                 <div class="spinner"></div>
                 <p>Loading camera feed...</p>
             </div>
@@ -242,85 +243,41 @@
     loadLocation();
 </script>
 <script>
-    const canvas = document.getElementById('cameraCanvas');
-    const ctx = canvas.getContext('2d');
-    const loadingIndicator = document.getElementById('loadingIndicator');
+    const cameraFeed = document.getElementById('cameraFeed');
     const statusIndicator = document.getElementById('statusIndicator');
     const frameCountDisplay = document.getElementById('frameCount');
     const detectionCountDisplay = document.getElementById('detectionCount');
     const detectionList = document.getElementById('detectionList');
 
-    let videoStream = null;
-    let video = null;
     let frameNumber = 0;
     let currentDetections = [];
-    let animationId = null;
 
-    // Set canvas size
-    function resizeCanvas() {
-        const rect = canvas.parentElement.getBoundingClientRect();
-        canvas.width = rect.width;
-        canvas.height = rect.height;
-    }
+    // Monitor stream status
+    cameraFeed.addEventListener('load', () => {
+        statusIndicator.style.color = '#00ff88';
+        statusIndicator.textContent = '●';
+        frameNumber++;
+        frameCountDisplay.textContent = frameNumber;
+    });
 
-    // Draw camera feed with detection boxes
-    function drawCameraFeed() {
-        if (video && video.readyState === video.HAVE_ENOUGH_DATA) {
-            // Draw video frame to canvas
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            // Draw detection boxes on top
-            drawDetectionBoxes(canvas.width, canvas.height);
-            
+    cameraFeed.addEventListener('error', () => {
+        statusIndicator.style.color = '#ef4444';
+        statusIndicator.textContent = '✗';
+        console.error('Error loading camera feed');
+    });
+
+    // Update frame count periodically (approximate)
+    setInterval(() => {
+        if (cameraFeed.complete && cameraFeed.naturalWidth > 0) {
             frameNumber++;
+            frameCountDisplay.textContent = frameNumber;
         }
-    }
+    }, 100);
 
-    function drawDetectionBoxes(width, height) {
-        currentDetections.forEach((detection, index) => {
-            const x = detection.x;
-            const y = detection.y;
-            const w = detection.width;
-            const h = detection.height;
-
-            // Draw bounding box
-            ctx.strokeStyle = '#00ff88';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(x, y, w, h);
-
-            // Draw label background
-            ctx.fillStyle = '#00ff88';
-            ctx.fillRect(x, y - 25, Math.max(120, detection.species.length * 8 + 40), 22);
-
-            // Draw label text
-            ctx.fillStyle = '#000';
-            ctx.font = 'bold 12px Arial';
-            ctx.fillText(
-                `${detection.species} (${Math.round(detection.confidence * 100)}%)`,
-                x + 5,
-                y - 8
-            );
-        });
-    }
-
-    function generateRandomDetections() {
-        const species = ['Clownfish', 'Angelfish', 'Turtle', 'Shark', 'Manta Ray', 'Grouper'];
-        const numDetections = Math.random() > 0.7 ? Math.floor(Math.random() * 3) + 1 : 0;
-        
-        currentDetections = [];
-        for (let i = 0; i < numDetections; i++) {
-            currentDetections.push({
-                species: species[Math.floor(Math.random() * species.length)],
-                confidence: Math.random() * 0.3 + 0.7,
-                x: Math.random() * (canvas.width - 100) + 20,
-                y: Math.random() * (canvas.height - 100) + 20,
-                width: 80 + Math.random() * 40,
-                height: 60 + Math.random() * 40
-            });
-        }
-    }
-
+    // Simulate detections for display (replace with actual detection data from API)
     function updateDetectionList() {
+        // This would be replaced with actual detection data from your YOLO model
+        // For now, showing empty state
         if (currentDetections.length === 0) {
             detectionList.innerHTML = '<p class="empty-state">No detections</p>';
             return;
@@ -339,60 +296,7 @@
         `).join('');
     }
 
-    function animate() {
-        generateRandomDetections();
-        drawCameraFeed();
-        updateDetectionList();
-        
-        frameCountDisplay.textContent = frameNumber;
-        detectionCountDisplay.textContent = currentDetections.length;
-        
-        animationId = requestAnimationFrame(animate);
-    }
-
-    async function startCamera() {
-        try {
-            // Request access to laptop camera
-            videoStream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
-                    facingMode: 'user' // Use front-facing camera (laptop camera)
-                }
-            });
-            
-            // Create video element to capture stream
-            video = document.createElement('video');
-            video.srcObject = videoStream;
-            video.autoplay = true;
-            video.playsInline = true;
-            
-            // Wait for video to be ready
-            video.addEventListener('loadedmetadata', () => {
-                resizeCanvas();
-                loadingIndicator.style.display = 'none';
-                statusIndicator.style.color = '#00ff88';
-                animate();
-            });
-            
-        } catch (error) {
-            console.error('Error accessing camera:', error);
-            loadingIndicator.innerHTML = `
-                <div class="spinner"></div>
-                <p style="color: #ef4444;">Error accessing camera: ${error.message}</p>
-                <p style="color: #9ca3af; font-size: 12px;">Please allow camera access in your browser settings</p>
-            `;
-            statusIndicator.style.color = '#ef4444';
-        }
-    }
-
-    window.addEventListener('resize', () => {
-        resizeCanvas();
-    });
-
-    // Initialize and start camera automatically
-    resizeCanvas();
-    startCamera();
-    
+    // Initialize detection list
+    updateDetectionList();
 </script>
 {% endblock %}

@@ -8,6 +8,8 @@ import cv2
 import threading
 import base64
 import numpy as np
+import requests
+import time
 
 app = Flask(__name__)
 
@@ -17,6 +19,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(basedir, "dash
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
+# Raspberry Pi Stream Configuration
+# Set PI_STREAM_URL environment variable or use default direct IP
+PI_STREAM_URL = os.environ.get('PI_STREAM_URL', 'http://172.16.96.90:8000/video_feed')
 
 # Models
 class Detection(db.Model):
@@ -140,7 +146,7 @@ def overview():
 
 @app.route('/camera')
 def camera():
-    return render_template('camera.html')
+    return render_template('camera.html', pi_stream_url=PI_STREAM_URL)
 
 @app.route('/analytics')
 def analytics():
@@ -244,60 +250,27 @@ def capture_frame():
         db.session.rollback()
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
-# Camera streaming (simulated)
+# Camera streaming from Raspberry Pi
 camera_lock = threading.Lock()
 camera_active = False
 
 def generate_frames():
-    """Generate simulated camera frames"""
+    """Proxy frames from Raspberry Pi stream via direct IP"""
     global camera_active
     
-    # Try to open camera, fallback to simulated feed
-    cap = None
-    try:
-        cap = cv2.VideoCapture(0)
-        if not cap.isOpened():
-            cap = None
-    except:
-        cap = None
-    
     while camera_active:
-        with camera_lock:
-            if cap and cap.isOpened():
-                ret, frame = cap.read()
-                if ret:
-                    # Resize frame
-                    frame = cv2.resize(frame, (640, 480))
-                    # Encode frame
-                    ret, buffer = cv2.imencode('.jpg', frame)
-                    if ret:
-                        frame_bytes = buffer.tobytes()
-                        yield (b'--frame\r\n'
-                               b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
-            else:
-                # Simulated underwater frame
-                frame = np.zeros((480, 640, 3), dtype=np.uint8)
-                # Underwater blue gradient
-                frame[:, :] = [20, 50, 100]
-                # Add some noise/bubbles
-                noise = np.random.randint(0, 30, (480, 640, 3), dtype=np.uint8)
-                frame = cv2.add(frame, noise)
-                # Encode
-                ret, buffer = cv2.imencode('.jpg', frame)
-                if ret:
-                    frame_bytes = buffer.tobytes()
-                    yield (b'--frame\r\n'
-                           b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
-        
-        import time
-        time.sleep(0.033)  # ~30 FPS
-    
-    if cap:
-        cap.release()
+        try:
+            r = requests.get(PI_STREAM_URL, timeout=2)
+            frame = r.content
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        except:
+            time.sleep(0.2)
 
 @app.route('/api/camera/stream')
+@app.route('/video_feed')
 def camera_stream():
-    """Stream camera feed"""
+    """Stream camera feed from Raspberry Pi"""
     global camera_active
     camera_active = True
     return Response(generate_frames(),

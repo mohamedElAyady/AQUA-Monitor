@@ -57,6 +57,7 @@ The required Python packages are:
 - Werkzeug 2.3.6
 - opencv-python 4.8.1.78
 - numpy 1.24.3
+- requests 2.31.0
 
 ### 3. Frontend Setup
 
@@ -211,8 +212,31 @@ INTERFACE/
 ### Database
 The SQLite database is automatically created at `dashboard.db` in the project root. To reset the database, simply delete this file and restart the Flask application.
 
-### Camera
-The system will attempt to use the default camera (index 0). If no camera is available, it will generate simulated underwater frames for testing.
+### Raspberry Pi Camera Stream
+The system is configured to stream video from a Raspberry Pi via direct IP connection. To configure the stream URL:
+
+**Option 1: Environment Variable (Recommended)**
+```bash
+# Windows PowerShell
+$env:PI_STREAM_URL="http://172.16.96.90:8000/video_feed"
+
+# Windows CMD
+set PI_STREAM_URL=http://172.16.96.90:8000/video_feed
+
+# Linux/Mac
+export PI_STREAM_URL="http://172.16.96.90:8000/video_feed"
+```
+
+**Option 2: Edit app.py directly**
+Update the IP address in `app.py` line 25 with your Raspberry Pi's IP address:
+```python
+PI_STREAM_URL = os.environ.get('PI_STREAM_URL', 'http://172.16.96.90:8000/video_feed')
+```
+
+**Note**: 
+- The stream endpoint expects MJPEG format (`multipart/x-mixed-replace`)
+- Make sure your Raspberry Pi is accessible on the same network at the configured IP address
+- The default IP `172.16.96.90:8000` should be updated to match your Raspberry Pi's actual IP address
 
 ### Mock Data
 Sample data can be loaded via:
