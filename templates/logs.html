@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Logs & Timeline - AQUA Monitor{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Logs & Event Timeline</h1>
+    <p>System events, detections, and alerts history</p>
+</div>
+
+<div class="filters">
+    <select id="severity-filter" class="filter-select">
+        <option value="">All Severity</option>
+        <option value="info">Info</option>
+        <option value="warning">Warning</option>
+        <option value="error">Error</option>
+    </select>
+    
+    <select id="type-filter" class="filter-select">
+        <option value="">All Types</option>
+        <option value="detection">Detection</option>
+        <option value="sensor">Sensor</option>
+        <option value="alert">Alert</option>
+        <option value="system">System</option>
+    </select>
+</div>
+
+<div class="logs-container">
+    <table class="logs-table">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Type</th>
+                <th>Severity</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody id="logs-body">
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+async function loadLogs() {
+    try {
+        const logsRes = await fetch('/api/logs');
+        const logs = logsRes.ok ? await logsRes.json() : [];
+        
+        console.log('Logs data received:', logs.length, 'records');
+        
+        if (logs.length > 0) {
+            renderLogs(logs);
+        } else {
+            document.getElementById('logs-body').innerHTML = '<tr><td colspan="4">No logs available</td></tr>';
+        }
+    } catch (error) {
+        console.error('Error loading logs:', error);
+        document.getElementById('logs-body').innerHTML = '<tr><td colspan="4">Error loading logs</td></tr>';
+    }
+}
+
+function renderLogs(logs) {
+    const tbody = document.getElementById('logs-body');
+    tbody.innerHTML = logs.map(log => {
+        const timestamp = new Date(log.timestamp);
+        const timeStr = timestamp.toLocaleString();
+        
+        return `
+            <tr class="log-row severity-${log.severity}">
+                <td class="time">${timeStr}</td>
+                <td class="type">${log.event_type || 'N/A'}</td>
+                <td class="severity">${log.severity || 'info'}</td>
+                <td class="message">${log.message || 'No message'}</td>
+            </tr>
+        `;
+    }).join('');
+    
+    // Apply current filters after rendering
+    filterLogs();
+}
+
+function filterLogs() {
+    const severity = document.getElementById('severity-filter').value;
+    const type = document.getElementById('type-filter').value;
+    
+    const rows = document.querySelectorAll('.log-row');
+    rows.forEach(row => {
+        const rowSeverity = row.classList.contains(`severity-${severity}`) || !severity;
+        const rowType = row.cells[1].textContent.toLowerCase().includes(type.toLowerCase()) || !type;
+        row.style.display = rowSeverity && rowType ? '' : 'none';
+    });
+}
+
+// Set up filter event listeners
+document.getElementById('severity-filter').addEventListener('change', filterLogs);
+document.getElementById('type-filter').addEventListener('change', filterLogs);
+
+// Load logs on page load
+loadLogs();
+</script>
+{% endblock %}

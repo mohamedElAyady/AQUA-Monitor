@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}Environmental Monitoring - AQUA Monitor{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Environmental Monitoring</h1>
+    <p>Real-time sensor data and environmental trends</p>
+</div>
+
+<div class="gauges-grid">
+    <div class="gauge-card">
+        <h3>Water Temperature</h3>
+        <canvas id="gauge-temp" class="gauge"></canvas>
+        <p id="value-temp" class="gauge-value">-- °C</p>
+    </div>
+    
+    <div class="gauge-card">
+        <h3>Humidity</h3>
+        <canvas id="gauge-humid" class="gauge"></canvas>
+        <p id="value-humid" class="gauge-value">-- %</p>
+    </div>
+    
+    <div class="gauge-card">
+        <h3>Pressure</h3>
+        <canvas id="gauge-pressure" class="gauge"></canvas>
+        <p id="value-pressure" class="gauge-value">-- mb</p>
+    </div>
+    
+    <div class="gauge-card">
+        <h3>pH Level</h3>
+        <canvas id="gauge-ph" class="gauge"></canvas>
+        <p id="value-ph" class="gauge-value">-- pH</p>
+    </div>
+    
+    <div class="gauge-card">
+        <h3>Turbidity</h3>
+        <canvas id="gauge-turbidity" class="gauge"></canvas>
+        <p id="value-turbidity" class="gauge-value">-- NTU</p>
+    </div>
+    
+    <div class="gauge-card">
+        <h3>Light Intensity</h3>
+        <canvas id="gauge-lux" class="gauge"></canvas>
+        <p id="value-lux" class="gauge-value">-- LUX</p>
+    </div>
+</div>
+
+<div class="content-grid">
+    <div class="card">
+        <h2>Temperature Trend (24h)</h2>
+        <canvas id="temp-trend"></canvas>
+    </div>
+    
+    <div class="card">
+        <h2>Humidity Trend (24h)</h2>
+        <canvas id="humid-trend"></canvas>
+    </div>
+</div>
+
+<div class="card full-width">
+    <h2>Multi-Sensor Overview</h2>
+    <canvas id="multi-sensor"></canvas>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+function drawGauge(canvasId, value, max, unit) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height;
+    
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#1f2937';
+    ctx.fillRect(0, 0, w, h);
+    
+    // Draw arc
+    ctx.strokeStyle = '#374151';
+    ctx.lineWidth = 10;
+    ctx.beginPath();
+    ctx.arc(w/2, h/2, 40, Math.PI, 0, false);
+    ctx.stroke();
+    
+    // Draw value arc
+    const angle = Math.PI + (value / max) * Math.PI;
+    ctx.strokeStyle = '#0ea5e9';
+    ctx.lineWidth = 10;
+    ctx.beginPath();
+    ctx.arc(w/2, h/2, 40, Math.PI, angle, false);
+    ctx.stroke();
+    
+    // Text
+    ctx.fillStyle = '#e5e7eb';
+    ctx.font = 'bold 16px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(value.toFixed(1) + unit, w/2, h/2 + 20);
+}
+
+async function updateEnvironment() {
+    const sensorsRes = await fetch('/api/sensors');
+    const sensors = sensorsRes.ok ? await sensorsRes.json() : [];
+    
+    if (sensors.length > 0) {
+        const latest = sensors[sensors.length - 1];
+        
+        drawGauge('gauge-temp', latest.temperature || 0, 30, '°');
+        drawGauge('gauge-humid', latest.humidity || 0, 100, '%');
+        drawGauge('gauge-pressure', latest.pressure || 0, 1030, '');
+        drawGauge('gauge-ph', latest.ph || 0, 14, '');
+        drawGauge('gauge-turbidity', latest.turbidity || 0, 10, '');
+        drawGauge('gauge-lux', latest.lux || 0, 10000, '');
+        
+        document.getElementById('value-temp').textContent = (latest.temperature || 0).toFixed(1) + ' °C';
+        document.getElementById('value-humid').textContent = (latest.humidity || 0).toFixed(1) + ' %';
+        document.getElementById('value-pressure').textContent = (latest.pressure || 0).toFixed(1) + ' mb';
+        document.getElementById('value-ph').textContent = (latest.ph || 0).toFixed(2) + ' pH';
+        document.getElementById('value-turbidity').textContent = (latest.turbidity || 0).toFixed(2) + ' NTU';
+        document.getElementById('value-lux').textContent = Math.round(latest.lux || 0) + ' LUX';
+    }
+    
+    // Trends
+    if (sensors.length > 0) {
+        const ctx1 = document.getElementById('temp-trend').getContext('2d');
+        new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: sensors.map(s => new Date(s.timestamp).getHours()),
+                datasets: [{
+                    label: 'Temperature (°C)',
+                    data: sensors.map(s => s.temperature),
+                    borderColor: '#f59e0b',
+                    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { labels: { color: '#e5e7eb' } } },
+                scales: {
+                    y: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } },
+                    x: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } }
+                }
+            }
+        });
+        
+        const ctx2 = document.getElementById('humid-trend').getContext('2d');
+        new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: sensors.map(s => new Date(s.timestamp).getHours()),
+                datasets: [{
+                    label: 'Humidity (%)',
+                    data: sensors.map(s => s.humidity),
+                    borderColor: '#06b6d4',
+                    backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { labels: { color: '#e5e7eb' } } },
+                scales: {
+                    y: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } },
+                    x: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } }
+                }
+            }
+        });
+        
+        const ctx3 = document.getElementById('multi-sensor').getContext('2d');
+        new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: sensors.map(s => new Date(s.timestamp).getHours()),
+                datasets: [
+                    {
+                        label: 'Temperature',
+                        data: sensors.map(s => s.temperature),
+                        borderColor: '#f59e0b',
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Humidity',
+                        data: sensors.map(s => s.humidity),
+                        borderColor: '#06b6d4',
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                interaction: { mode: 'index', intersect: false },
+                plugins: { legend: { labels: { color: '#e5e7eb' } } },
+                scales: {
+                    y: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } },
+                    y1: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' }, position: 'right' },
+                    x: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } }
+                }
+            }
+        });
+    }
+}
+
+updateEnvironment();
+// Auto-refresh disabled - uncomment the line below to enable 5-second auto-refresh
+// setInterval(updateEnvironment, 5000);
+</script>
+{% endblock %}

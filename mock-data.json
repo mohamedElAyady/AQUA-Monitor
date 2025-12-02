@@ -1,0 +1,1216 @@
+{
+  "detections": [
+    {
+      "id": 1,
+      "species": "Clownfish",
+      "count": 3,
+      "confidence": 0.94,
+      "timestamp": "2024-01-15T14:23:45.123Z",
+      "x": 45.2,
+      "y": 32.8
+    },
+    {
+      "id": 2,
+      "species": "Angelfish",
+      "count": 2,
+      "confidence": 0.87,
+      "timestamp": "2024-01-15T14:25:12.456Z",
+      "x": 67.3,
+      "y": 21.5
+    },
+    {
+      "id": 3,
+      "species": "Sea Turtle",
+      "count": 1,
+      "confidence": 0.96,
+      "timestamp": "2024-01-15T14:28:33.789Z",
+      "x": 23.1,
+      "y": 78.9
+    },
+    {
+      "id": 4,
+      "species": "Coral",
+      "count": 5,
+      "confidence": 0.82,
+      "timestamp": "2024-01-15T14:32:15.234Z",
+      "x": 89.4,
+      "y": 45.6
+    },
+    {
+      "id": 5,
+      "species": "Clownfish",
+      "count": 4,
+      "confidence": 0.91,
+      "timestamp": "2024-01-15T14:35:47.567Z",
+      "x": 12.7,
+      "y": 56.3
+    },
+    {
+      "id": 6,
+      "species": "Seagrass",
+      "count": 8,
+      "confidence": 0.79,
+      "timestamp": "2024-01-15T14:41:22.890Z",
+      "x": 34.5,
+      "y": 67.2
+    },
+    {
+      "id": 7,
+      "species": "Urchin",
+      "count": 2,
+      "confidence": 0.88,
+      "timestamp": "2024-01-15T14:45:11.123Z",
+      "x": 56.8,
+      "y": 23.4
+    },
+    {
+      "id": 8,
+      "species": "Starfish",
+      "count": 1,
+      "confidence": 0.93,
+      "timestamp": "2024-01-15T14:48:56.456Z",
+      "x": 78.2,
+      "y": 89.1
+    },
+    {
+      "id": 9,
+      "species": "Angelfish",
+      "count": 3,
+      "confidence": 0.85,
+      "timestamp": "2024-01-15T14:52:34.789Z",
+      "x": 45.9,
+      "y": 34.7
+    },
+    {
+      "id": 10,
+      "species": "Clownfish",
+      "count": 2,
+      "confidence": 0.92,
+      "timestamp": "2024-01-15T14:56:18.234Z",
+      "x": 67.4,
+      "y": 12.8
+    },
+    {
+      "id": 11,
+      "species": "Sea Turtle",
+      "count": 1,
+      "confidence": 0.97,
+      "timestamp": "2024-01-15T15:01:42.567Z",
+      "x": 23.6,
+      "y": 45.2
+    },
+    {
+      "id": 12,
+      "species": "Coral",
+      "count": 6,
+      "confidence": 0.81,
+      "timestamp": "2024-01-15T15:05:27.890Z",
+      "x": 89.1,
+      "y": 78.5
+    },
+    {
+      "id": 13,
+      "species": "Seagrass",
+      "count": 7,
+      "confidence": 0.76,
+      "timestamp": "2024-01-15T15:09:15.123Z",
+      "x": 34.8,
+      "y": 56.9
+    },
+    {
+      "id": 14,
+      "species": "Urchin",
+      "count": 3,
+      "confidence": 0.89,
+      "timestamp": "2024-01-15T15:13:48.456Z",
+      "x": 56.3,
+      "y": 23.7
+    },
+    {
+      "id": 15,
+      "species": "Starfish",
+      "count": 2,
+      "confidence": 0.94,
+      "timestamp": "2024-01-15T15:17:22.789Z",
+      "x": 78.6,
+      "y": 89.4
+    },
+    {
+      "id": 16,
+      "species": "Clownfish",
+      "count": 5,
+      "confidence": 0.90,
+      "timestamp": "2024-01-15T15:21:55.234Z",
+      "x": 12.4,
+      "y": 67.1
+    },
+    {
+      "id": 17,
+      "species": "Angelfish",
+      "count": 2,
+      "confidence": 0.86,
+      "timestamp": "2024-01-15T15:25:39.567Z",
+      "x": 45.7,
+      "y": 34.2
+    },
+    {
+      "id": 18,
+      "species": "Coral",
+      "count": 4,
+      "confidence": 0.83,
+      "timestamp": "2024-01-15T15:29:14.890Z",
+      "x": 67.9,
+      "y": 12.5
+    },
+    {
+      "id": 19,
+      "species": "Sea Turtle",
+      "count": 1,
+      "confidence": 0.95,
+      "timestamp": "2024-01-15T15:33:48.123Z",
+      "x": 23.3,
+      "y": 78.8
+    },
+    {
+      "id": 20,
+      "species": "Seagrass",
+      "count": 9,
+      "confidence": 0.77,
+      "timestamp": "2024-01-15T15:37:26.456Z",
+      "x": 89.7,
+      "y": 45.1
+    },
+    {
+      "id": 21,
+      "species": "Urchin",
+      "count": 2,
+      "confidence": 0.87,
+      "timestamp": "2024-01-15T15:41:59.789Z",
+      "x": 34.2,
+      "y": 56.6
+    },
+    {
+      "id": 22,
+      "species": "Starfish",
+      "count": 1,
+      "confidence": 0.91,
+      "timestamp": "2024-01-15T15:45:33.234Z",
+      "x": 56.5,
+      "y": 23.9
+    },
+    {
+      "id": 23,
+      "species": "Clownfish",
+      "count": 3,
+      "confidence": 0.93,
+      "timestamp": "2024-01-15T15:49:17.567Z",
+      "x": 78.1,
+      "y": 89.7
+    },
+    {
+      "id": 24,
+      "species": "Angelfish",
+      "count": 4,
+      "confidence": 0.84,
+      "timestamp": "2024-01-15T15:53:51.890Z",
+      "x": 12.8,
+      "y": 67.4
+    },
+    {
+      "id": 25,
+      "species": "Coral",
+      "count": 5,
+      "confidence": 0.80,
+      "timestamp": "2024-01-15T15:57:35.123Z",
+      "x": 45.4,
+      "y": 34.6
+    },
+    {
+      "id": 26,
+      "species": "Sea Turtle",
+      "count": 1,
+      "confidence": 0.98,
+      "timestamp": "2024-01-15T16:01:18.456Z",
+      "x": 67.2,
+      "y": 12.1
+    },
+    {
+      "id": 27,
+      "species": "Seagrass",
+      "count": 6,
+      "confidence": 0.78,
+      "timestamp": "2024-01-15T16:05:02.789Z",
+      "x": 23.9,
+      "y": 78.3
+    },
+    {
+      "id": 28,
+      "species": "Urchin",
+      "count": 3,
+      "confidence": 0.88,
+      "timestamp": "2024-01-15T16:08:46.234Z",
+      "x": 89.3,
+      "y": 45.8
+    },
+    {
+      "id": 29,
+      "species": "Starfish",
+      "count": 2,
+      "confidence": 0.92,
+      "timestamp": "2024-01-15T16:12:29.567Z",
+      "x": 34.6,
+      "y": 56.2
+    },
+    {
+      "id": 30,
+      "species": "Clownfish",
+      "count": 4,
+      "confidence": 0.89,
+      "timestamp": "2024-01-15T16:16:13.890Z",
+      "x": 56.7,
+      "y": 23.2
+    }
+  ],
+  "sensor_readings": [
+    {
+      "id": 1,
+      "temperature": 24.5,
+      "humidity": 65.2,
+      "pressure": 1012.3,
+      "depth": 12.4,
+      "turbidity": 2.1,
+      "lux": 3500,
+      "ph": 7.6,
+      "salinity": 32.8,
+      "timestamp": "2024-01-15T00:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "temperature": 24.3,
+      "humidity": 64.8,
+      "pressure": 1012.5,
+      "depth": 12.6,
+      "turbidity": 2.0,
+      "lux": 3200,
+      "ph": 7.6,
+      "salinity": 32.9,
+      "timestamp": "2024-01-15T01:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "temperature": 24.1,
+      "humidity": 64.5,
+      "pressure": 1012.7,
+      "depth": 12.8,
+      "turbidity": 1.9,
+      "lux": 2800,
+      "ph": 7.5,
+      "salinity": 33.0,
+      "timestamp": "2024-01-15T02:00:00.000Z"
+    },
+    {
+      "id": 4,
+      "temperature": 23.9,
+      "humidity": 64.2,
+      "pressure": 1012.9,
+      "depth": 13.0,
+      "turbidity": 1.8,
+      "lux": 2500,
+      "ph": 7.5,
+      "salinity": 33.1,
+      "timestamp": "2024-01-15T03:00:00.000Z"
+    },
+    {
+      "id": 5,
+      "temperature": 23.7,
+      "humidity": 63.9,
+      "pressure": 1013.1,
+      "depth": 13.2,
+      "turbidity": 1.7,
+      "lux": 2200,
+      "ph": 7.4,
+      "salinity": 33.2,
+      "timestamp": "2024-01-15T04:00:00.000Z"
+    },
+    {
+      "id": 6,
+      "temperature": 23.5,
+      "humidity": 63.6,
+      "pressure": 1013.3,
+      "depth": 13.4,
+      "turbidity": 1.6,
+      "lux": 2000,
+      "ph": 7.4,
+      "salinity": 33.3,
+      "timestamp": "2024-01-15T05:00:00.000Z"
+    },
+    {
+      "id": 7,
+      "temperature": 23.8,
+      "humidity": 64.0,
+      "pressure": 1013.0,
+      "depth": 13.1,
+      "turbidity": 1.7,
+      "lux": 2500,
+      "ph": 7.5,
+      "salinity": 33.1,
+      "timestamp": "2024-01-15T06:00:00.000Z"
+    },
+    {
+      "id": 8,
+      "temperature": 24.2,
+      "humidity": 64.5,
+      "pressure": 1012.8,
+      "depth": 12.9,
+      "turbidity": 1.8,
+      "lux": 3000,
+      "ph": 7.5,
+      "salinity": 33.0,
+      "timestamp": "2024-01-15T07:00:00.000Z"
+    },
+    {
+      "id": 9,
+      "temperature": 24.6,
+      "humidity": 65.0,
+      "pressure": 1012.6,
+      "depth": 12.7,
+      "turbidity": 1.9,
+      "lux": 4000,
+      "ph": 7.6,
+      "salinity": 32.9,
+      "timestamp": "2024-01-15T08:00:00.000Z"
+    },
+    {
+      "id": 10,
+      "temperature": 25.0,
+      "humidity": 65.5,
+      "pressure": 1012.4,
+      "depth": 12.5,
+      "turbidity": 2.0,
+      "lux": 5000,
+      "ph": 7.6,
+      "salinity": 32.8,
+      "timestamp": "2024-01-15T09:00:00.000Z"
+    },
+    {
+      "id": 11,
+      "temperature": 25.4,
+      "humidity": 66.0,
+      "pressure": 1012.2,
+      "depth": 12.3,
+      "turbidity": 2.1,
+      "lux": 6000,
+      "ph": 7.7,
+      "salinity": 32.7,
+      "timestamp": "2024-01-15T10:00:00.000Z"
+    },
+    {
+      "id": 12,
+      "temperature": 25.8,
+      "humidity": 66.5,
+      "pressure": 1012.0,
+      "depth": 12.1,
+      "turbidity": 2.2,
+      "lux": 7000,
+      "ph": 7.7,
+      "salinity": 32.6,
+      "timestamp": "2024-01-15T11:00:00.000Z"
+    },
+    {
+      "id": 13,
+      "temperature": 26.2,
+      "humidity": 67.0,
+      "pressure": 1011.8,
+      "depth": 11.9,
+      "turbidity": 2.3,
+      "lux": 8000,
+      "ph": 7.8,
+      "salinity": 32.5,
+      "timestamp": "2024-01-15T12:00:00.000Z"
+    },
+    {
+      "id": 14,
+      "temperature": 26.5,
+      "humidity": 67.5,
+      "pressure": 1011.6,
+      "depth": 11.7,
+      "turbidity": 2.4,
+      "lux": 8500,
+      "ph": 7.8,
+      "salinity": 32.4,
+      "timestamp": "2024-01-15T13:00:00.000Z"
+    },
+    {
+      "id": 15,
+      "temperature": 26.8,
+      "humidity": 68.0,
+      "pressure": 1011.4,
+      "depth": 11.5,
+      "turbidity": 2.5,
+      "lux": 9000,
+      "ph": 7.9,
+      "salinity": 32.3,
+      "timestamp": "2024-01-15T14:00:00.000Z"
+    },
+    {
+      "id": 16,
+      "temperature": 27.0,
+      "humidity": 68.5,
+      "pressure": 1011.2,
+      "depth": 11.3,
+      "turbidity": 2.6,
+      "lux": 9200,
+      "ph": 7.9,
+      "salinity": 32.2,
+      "timestamp": "2024-01-15T15:00:00.000Z"
+    },
+    {
+      "id": 17,
+      "temperature": 27.2,
+      "humidity": 69.0,
+      "pressure": 1011.0,
+      "depth": 11.1,
+      "turbidity": 2.7,
+      "lux": 9500,
+      "ph": 8.0,
+      "salinity": 32.1,
+      "timestamp": "2024-01-15T16:00:00.000Z"
+    },
+    {
+      "id": 18,
+      "temperature": 27.1,
+      "humidity": 68.8,
+      "pressure": 1011.1,
+      "depth": 11.2,
+      "turbidity": 2.6,
+      "lux": 9300,
+      "ph": 7.9,
+      "salinity": 32.2,
+      "timestamp": "2024-01-15T17:00:00.000Z"
+    },
+    {
+      "id": 19,
+      "temperature": 26.9,
+      "humidity": 68.3,
+      "pressure": 1011.3,
+      "depth": 11.4,
+      "turbidity": 2.5,
+      "lux": 8800,
+      "ph": 7.9,
+      "salinity": 32.3,
+      "timestamp": "2024-01-15T18:00:00.000Z"
+    },
+    {
+      "id": 20,
+      "temperature": 26.6,
+      "humidity": 67.8,
+      "pressure": 1011.5,
+      "depth": 11.6,
+      "turbidity": 2.4,
+      "lux": 7500,
+      "ph": 7.8,
+      "salinity": 32.4,
+      "timestamp": "2024-01-15T19:00:00.000Z"
+    },
+    {
+      "id": 21,
+      "temperature": 26.3,
+      "humidity": 67.3,
+      "pressure": 1011.7,
+      "depth": 11.8,
+      "turbidity": 2.3,
+      "lux": 6500,
+      "ph": 7.8,
+      "salinity": 32.5,
+      "timestamp": "2024-01-15T20:00:00.000Z"
+    },
+    {
+      "id": 22,
+      "temperature": 26.0,
+      "humidity": 66.8,
+      "pressure": 1011.9,
+      "depth": 12.0,
+      "turbidity": 2.2,
+      "lux": 5500,
+      "ph": 7.7,
+      "salinity": 32.6,
+      "timestamp": "2024-01-15T21:00:00.000Z"
+    },
+    {
+      "id": 23,
+      "temperature": 25.7,
+      "humidity": 66.3,
+      "pressure": 1012.1,
+      "depth": 12.2,
+      "turbidity": 2.1,
+      "lux": 4500,
+      "ph": 7.7,
+      "salinity": 32.7,
+      "timestamp": "2024-01-15T22:00:00.000Z"
+    },
+    {
+      "id": 24,
+      "temperature": 25.3,
+      "humidity": 65.8,
+      "pressure": 1012.3,
+      "depth": 12.4,
+      "turbidity": 2.0,
+      "lux": 3800,
+      "ph": 7.6,
+      "salinity": 32.8,
+      "timestamp": "2024-01-15T23:00:00.000Z"
+    }
+  ],
+  "device_health": [
+    {
+      "id": 1,
+      "cpu_temp": 52.3,
+      "gpu_temp": 68.5,
+      "battery_level": 87.5,
+      "fan_status": "Normal",
+      "storage_used": 45.2,
+      "connectivity": "Excellent",
+      "yolo_fps": 24.5,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 45.8,
+      "gpu_usage": 72.3,
+      "ram_usage": 58.4,
+      "timestamp": "2024-01-15T00:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "cpu_temp": 53.1,
+      "gpu_temp": 69.2,
+      "battery_level": 86.8,
+      "fan_status": "Normal",
+      "storage_used": 45.3,
+      "connectivity": "Excellent",
+      "yolo_fps": 24.2,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 47.2,
+      "gpu_usage": 73.5,
+      "ram_usage": 59.1,
+      "timestamp": "2024-01-15T01:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "cpu_temp": 54.5,
+      "gpu_temp": 70.8,
+      "battery_level": 85.9,
+      "fan_status": "High",
+      "storage_used": 45.5,
+      "connectivity": "Good",
+      "yolo_fps": 23.8,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 49.6,
+      "gpu_usage": 75.2,
+      "ram_usage": 60.3,
+      "timestamp": "2024-01-15T02:00:00.000Z"
+    },
+    {
+      "id": 4,
+      "cpu_temp": 55.2,
+      "gpu_temp": 71.5,
+      "battery_level": 85.1,
+      "fan_status": "High",
+      "storage_used": 45.7,
+      "connectivity": "Good",
+      "yolo_fps": 23.5,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 51.3,
+      "gpu_usage": 76.8,
+      "ram_usage": 61.5,
+      "timestamp": "2024-01-15T03:00:00.000Z"
+    },
+    {
+      "id": 5,
+      "cpu_temp": 56.8,
+      "gpu_temp": 73.2,
+      "battery_level": 84.2,
+      "fan_status": "High",
+      "storage_used": 45.9,
+      "connectivity": "Good",
+      "yolo_fps": 23.1,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 53.7,
+      "gpu_usage": 78.4,
+      "ram_usage": 62.8,
+      "timestamp": "2024-01-15T04:00:00.000Z"
+    },
+    {
+      "id": 6,
+      "cpu_temp": 57.5,
+      "gpu_temp": 74.1,
+      "battery_level": 83.5,
+      "fan_status": "Max",
+      "storage_used": 46.1,
+      "connectivity": "Fair",
+      "yolo_fps": 22.8,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 55.9,
+      "gpu_usage": 79.6,
+      "ram_usage": 64.1,
+      "timestamp": "2024-01-15T05:00:00.000Z"
+    },
+    {
+      "id": 7,
+      "cpu_temp": 58.2,
+      "gpu_temp": 75.3,
+      "battery_level": 82.8,
+      "fan_status": "Max",
+      "storage_used": 46.3,
+      "connectivity": "Fair",
+      "yolo_fps": 22.5,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 58.1,
+      "gpu_usage": 81.2,
+      "ram_usage": 65.4,
+      "timestamp": "2024-01-15T06:00:00.000Z"
+    },
+    {
+      "id": 8,
+      "cpu_temp": 59.5,
+      "gpu_temp": 76.8,
+      "battery_level": 82.1,
+      "fan_status": "Max",
+      "storage_used": 46.5,
+      "connectivity": "Good",
+      "yolo_fps": 22.2,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 60.4,
+      "gpu_usage": 82.7,
+      "ram_usage": 66.7,
+      "timestamp": "2024-01-15T07:00:00.000Z"
+    },
+    {
+      "id": 9,
+      "cpu_temp": 60.2,
+      "gpu_temp": 77.5,
+      "battery_level": 81.4,
+      "fan_status": "Max",
+      "storage_used": 46.7,
+      "connectivity": "Good",
+      "yolo_fps": 21.9,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 62.8,
+      "gpu_usage": 84.1,
+      "ram_usage": 68.0,
+      "timestamp": "2024-01-15T08:00:00.000Z"
+    },
+    {
+      "id": 10,
+      "cpu_temp": 61.5,
+      "gpu_temp": 78.9,
+      "battery_level": 80.7,
+      "fan_status": "Max",
+      "storage_used": 46.9,
+      "connectivity": "Excellent",
+      "yolo_fps": 21.6,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 65.2,
+      "gpu_usage": 85.5,
+      "ram_usage": 69.3,
+      "timestamp": "2024-01-15T09:00:00.000Z"
+    },
+    {
+      "id": 11,
+      "cpu_temp": 62.8,
+      "gpu_temp": 80.2,
+      "battery_level": 80.0,
+      "fan_status": "Max",
+      "storage_used": 47.1,
+      "connectivity": "Excellent",
+      "yolo_fps": 21.3,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 67.6,
+      "gpu_usage": 86.9,
+      "ram_usage": 70.6,
+      "timestamp": "2024-01-15T10:00:00.000Z"
+    },
+    {
+      "id": 12,
+      "cpu_temp": 64.1,
+      "gpu_temp": 81.5,
+      "battery_level": 79.3,
+      "fan_status": "Max",
+      "storage_used": 47.3,
+      "connectivity": "Excellent",
+      "yolo_fps": 21.0,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 70.0,
+      "gpu_usage": 88.3,
+      "ram_usage": 71.9,
+      "timestamp": "2024-01-15T11:00:00.000Z"
+    },
+    {
+      "id": 13,
+      "cpu_temp": 65.4,
+      "gpu_temp": 82.8,
+      "battery_level": 78.6,
+      "fan_status": "Max",
+      "storage_used": 47.5,
+      "connectivity": "Excellent",
+      "yolo_fps": 20.7,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 72.4,
+      "gpu_usage": 89.7,
+      "ram_usage": 73.2,
+      "timestamp": "2024-01-15T12:00:00.000Z"
+    },
+    {
+      "id": 14,
+      "cpu_temp": 66.7,
+      "gpu_temp": 84.1,
+      "battery_level": 77.9,
+      "fan_status": "Max",
+      "storage_used": 47.7,
+      "connectivity": "Excellent",
+      "yolo_fps": 20.4,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 74.8,
+      "gpu_usage": 91.1,
+      "ram_usage": 74.5,
+      "timestamp": "2024-01-15T13:00:00.000Z"
+    },
+    {
+      "id": 15,
+      "cpu_temp": 68.0,
+      "gpu_temp": 85.4,
+      "battery_level": 77.2,
+      "fan_status": "Max",
+      "storage_used": 47.9,
+      "connectivity": "Excellent",
+      "yolo_fps": 20.1,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 77.2,
+      "gpu_usage": 92.5,
+      "ram_usage": 75.8,
+      "timestamp": "2024-01-15T14:00:00.000Z"
+    },
+    {
+      "id": 16,
+      "cpu_temp": 69.3,
+      "gpu_temp": 86.7,
+      "battery_level": 76.5,
+      "fan_status": "Max",
+      "storage_used": 48.1,
+      "connectivity": "Excellent",
+      "yolo_fps": 19.8,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 79.6,
+      "gpu_usage": 93.9,
+      "ram_usage": 77.1,
+      "timestamp": "2024-01-15T15:00:00.000Z"
+    },
+    {
+      "id": 17,
+      "cpu_temp": 70.6,
+      "gpu_temp": 88.0,
+      "battery_level": 75.8,
+      "fan_status": "Max",
+      "storage_used": 48.3,
+      "connectivity": "Excellent",
+      "yolo_fps": 19.5,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 82.0,
+      "gpu_usage": 95.3,
+      "ram_usage": 78.4,
+      "timestamp": "2024-01-15T16:00:00.000Z"
+    },
+    {
+      "id": 18,
+      "cpu_temp": 69.8,
+      "gpu_temp": 87.2,
+      "battery_level": 75.1,
+      "fan_status": "Max",
+      "storage_used": 48.5,
+      "connectivity": "Excellent",
+      "yolo_fps": 19.2,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 80.4,
+      "gpu_usage": 94.1,
+      "ram_usage": 77.7,
+      "timestamp": "2024-01-15T17:00:00.000Z"
+    },
+    {
+      "id": 19,
+      "cpu_temp": 68.5,
+      "gpu_temp": 85.9,
+      "battery_level": 74.4,
+      "fan_status": "Max",
+      "storage_used": 48.7,
+      "connectivity": "Excellent",
+      "yolo_fps": 18.9,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 78.8,
+      "gpu_usage": 92.9,
+      "ram_usage": 77.0,
+      "timestamp": "2024-01-15T18:00:00.000Z"
+    },
+    {
+      "id": 20,
+      "cpu_temp": 67.2,
+      "gpu_temp": 84.6,
+      "battery_level": 73.7,
+      "fan_status": "High",
+      "storage_used": 48.9,
+      "connectivity": "Excellent",
+      "yolo_fps": 18.6,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 77.2,
+      "gpu_usage": 91.7,
+      "ram_usage": 76.3,
+      "timestamp": "2024-01-15T19:00:00.000Z"
+    },
+    {
+      "id": 21,
+      "cpu_temp": 65.9,
+      "gpu_temp": 83.3,
+      "battery_level": 73.0,
+      "fan_status": "High",
+      "storage_used": 49.1,
+      "connectivity": "Good",
+      "yolo_fps": 18.3,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 75.6,
+      "gpu_usage": 90.5,
+      "ram_usage": 75.6,
+      "timestamp": "2024-01-15T20:00:00.000Z"
+    },
+    {
+      "id": 22,
+      "cpu_temp": 64.6,
+      "gpu_temp": 82.0,
+      "battery_level": 72.3,
+      "fan_status": "High",
+      "storage_used": 49.3,
+      "connectivity": "Good",
+      "yolo_fps": 18.0,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 74.0,
+      "gpu_usage": 89.3,
+      "ram_usage": 74.9,
+      "timestamp": "2024-01-15T21:00:00.000Z"
+    },
+    {
+      "id": 23,
+      "cpu_temp": 63.3,
+      "gpu_temp": 80.7,
+      "battery_level": 71.6,
+      "fan_status": "Normal",
+      "storage_used": 49.5,
+      "connectivity": "Good",
+      "yolo_fps": 17.7,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 72.4,
+      "gpu_usage": 88.1,
+      "ram_usage": 74.2,
+      "timestamp": "2024-01-15T22:00:00.000Z"
+    },
+    {
+      "id": 24,
+      "cpu_temp": 62.0,
+      "gpu_temp": 79.4,
+      "battery_level": 70.9,
+      "fan_status": "Normal",
+      "storage_used": 49.7,
+      "connectivity": "Excellent",
+      "yolo_fps": 17.4,
+      "model_name": "YOLOv8m",
+      "cpu_usage": 70.8,
+      "gpu_usage": 86.9,
+      "ram_usage": 73.5,
+      "timestamp": "2024-01-15T23:00:00.000Z"
+    }
+  ],
+  "logs": [
+    {
+      "id": 1,
+      "event_type": "detection",
+      "message": "Detected 3 Clownfish with 94% confidence",
+      "severity": "info",
+      "timestamp": "2024-01-15T14:23:45.123Z"
+    },
+    {
+      "id": 2,
+      "event_type": "detection",
+      "message": "Detected 2 Angelfish with 87% confidence",
+      "severity": "info",
+      "timestamp": "2024-01-15T14:25:12.456Z"
+    },
+    {
+      "id": 3,
+      "event_type": "sensor",
+      "message": "Water temperature reading: 26.8°C",
+      "severity": "info",
+      "timestamp": "2024-01-15T14:30:00.000Z"
+    },
+    {
+      "id": 4,
+      "event_type": "detection",
+      "message": "Detected 1 Sea Turtle with 96% confidence",
+      "severity": "info",
+      "timestamp": "2024-01-15T14:28:33.789Z"
+    },
+    {
+      "id": 5,
+      "event_type": "system",
+      "message": "YOLO model inference running at 20.1 FPS",
+      "severity": "info",
+      "timestamp": "2024-01-15T14:35:00.000Z"
+    },
+    {
+      "id": 6,
+      "event_type": "alert",
+      "message": "GPU temperature exceeded 85°C threshold",
+      "severity": "warning",
+      "timestamp": "2024-01-15T14:40:00.000Z"
+    },
+    {
+      "id": 7,
+      "event_type": "detection",
+      "message": "Detected 5 Coral formations with 82% confidence",
+      "severity": "info",
+      "timestamp": "2024-01-15T14:32:15.234Z"
+    },
+    {
+      "id": 8,
+      "event_type": "sensor",
+      "message": "pH level reading: 7.9 (within normal range)",
+      "severity": "info",
+      "timestamp": "2024-01-15T14:45:00.000Z"
+    },
+    {
+      "id": 9,
+      "event_type": "system",
+      "message": "Storage usage at 47.9%",
+      "severity": "info",
+      "timestamp": "2024-01-15T14:50:00.000Z"
+    },
+    {
+      "id": 10,
+      "event_type": "detection",
+      "message": "Detected 4 Clownfish with 91% confidence",
+      "severity": "info",
+      "timestamp": "2024-01-15T14:35:47.567Z"
+    },
+    {
+      "id": 11,
+      "event_type": "alert",
+      "message": "Battery level dropped below 80%",
+      "severity": "warning",
+      "timestamp": "2024-01-15T15:00:00.000Z"
+    },
+    {
+      "id": 12,
+      "event_type": "sensor",
+      "message": "Turbidity reading: 2.6 NTU (slightly elevated)",
+      "severity": "info",
+      "timestamp": "2024-01-15T15:05:00.000Z"
+    },
+    {
+      "id": 13,
+      "event_type": "detection",
+      "message": "Detected 8 Seagrass patches with 79% confidence",
+      "severity": "info",
+      "timestamp": "2024-01-15T14:41:22.890Z"
+    },
+    {
+      "id": 14,
+      "event_type": "system",
+      "message": "CPU usage spiked to 77.2%",
+      "severity": "info",
+      "timestamp": "2024-01-15T15:10:00.000Z"
+    },
+    {
+      "id": 15,
+      "event_type": "detection",
+      "message": "Detected 2 Urchin with 88% confidence",
+      "severity": "info",
+      "timestamp": "2024-01-15T14:45:11.123Z"
+    },
+    {
+      "id": 16,
+      "event_type": "sensor",
+      "message": "Light intensity reading: 9500 LUX",
+      "severity": "info",
+      "timestamp": "2024-01-15T15:15:00.000Z"
+    },
+    {
+      "id": 17,
+      "event_type": "detection",
+      "message": "Detected 1 Starfish with 93% confidence",
+      "severity": "info",
+      "timestamp": "2024-01-15T14:48:56.456Z"
+    },
+    {
+      "id": 18,
+      "event_type": "system",
+      "message": "RAM usage at 75.8%",
+      "severity": "info",
+      "timestamp": "2024-01-15T15:20:00.000Z"
+    },
+    {
+      "id": 19,
+      "event_type": "alert",
+      "message": "Connectivity status changed to Excellent",
+      "severity": "info",
+      "timestamp": "2024-01-15T15:25:00.000Z"
+    },
+    {
+      "id": 20,
+      "event_type": "detection",
+      "message": "Detected 3 Angelfish with 85% confidence",
+      "severity": "info",
+      "timestamp": "2024-01-15T14:52:34.789Z"
+    },
+    {
+      "id": 21,
+      "event_type": "sensor",
+      "message": "Salinity reading: 32.1 ppt",
+      "severity": "info",
+      "timestamp": "2024-01-15T15:30:00.000Z"
+    },
+    {
+      "id": 22,
+      "event_type": "system",
+      "message": "Fan status set to Max due to high temperatures",
+      "severity": "info",
+      "timestamp": "2024-01-15T15:35:00.000Z"
+    },
+    {
+      "id": 23,
+      "event_type": "detection",
+      "message": "Detected 2 Clownfish with 92% confidence",
+      "severity": "info",
+      "timestamp": "2024-01-15T14:56:18.234Z"
+    },
+    {
+      "id": 24,
+      "event_type": "alert",
+      "message": "YOLO FPS dropped below 20 FPS",
+      "severity": "warning",
+      "timestamp": "2024-01-15T15:40:00.000Z"
+    },
+    {
+      "id": 25,
+      "event_type": "detection",
+      "message": "Detected 1 Sea Turtle with 97% confidence",
+      "severity": "info",
+      "timestamp": "2024-01-15T15:01:42.567Z"
+    },
+    {
+      "id": 26,
+      "event_type": "sensor",
+      "message": "Pressure reading: 1011.0 mb",
+      "severity": "info",
+      "timestamp": "2024-01-15T15:45:00.000Z"
+    },
+    {
+      "id": 27,
+      "event_type": "system",
+      "message": "Model YOLOv8m loaded successfully",
+      "severity": "info",
+      "timestamp": "2024-01-15T15:50:00.000Z"
+    },
+    {
+      "id": 28,
+      "event_type": "detection",
+      "message": "Detected 6 Coral formations with 81% confidence",
+      "severity": "info",
+      "timestamp": "2024-01-15T15:05:27.890Z"
+    },
+    {
+      "id": 29,
+      "event_type": "alert",
+      "message": "Storage usage approaching 50% threshold",
+      "severity": "warning",
+      "timestamp": "2024-01-15T15:55:00.000Z"
+    },
+    {
+      "id": 30,
+      "event_type": "detection",
+      "message": "Detected 7 Seagrass patches with 76% confidence",
+      "severity": "info",
+      "timestamp": "2024-01-15T15:09:15.123Z"
+    },
+    {
+      "id": 31,
+      "event_type": "sensor",
+      "message": "Depth reading: 11.1 meters",
+      "severity": "info",
+      "timestamp": "2024-01-15T16:00:00.000Z"
+    },
+    {
+      "id": 32,
+      "event_type": "system",
+      "message": "GPU usage at 95.3%",
+      "severity": "info",
+      "timestamp": "2024-01-15T16:05:00.000Z"
+    },
+    {
+      "id": 33,
+      "event_type": "detection",
+      "message": "Detected 3 Urchin with 89% confidence",
+      "severity": "info",
+      "timestamp": "2024-01-15T15:13:48.456Z"
+    },
+    {
+      "id": 34,
+      "event_type": "alert",
+      "message": "High turbidity detected - possible sediment disturbance",
+      "severity": "warning",
+      "timestamp": "2024-01-15T16:10:00.000Z"
+    },
+    {
+      "id": 35,
+      "event_type": "detection",
+      "message": "Detected 2 Starfish with 94% confidence",
+      "severity": "info",
+      "timestamp": "2024-01-15T15:17:22.789Z"
+    },
+    {
+      "id": 36,
+      "event_type": "system",
+      "message": "System health check completed - all systems operational",
+      "severity": "info",
+      "timestamp": "2024-01-15T16:15:00.000Z"
+    },
+    {
+      "id": 37,
+      "event_type": "detection",
+      "message": "Detected 5 Clownfish with 90% confidence",
+      "severity": "info",
+      "timestamp": "2024-01-15T15:21:55.234Z"
+    },
+    {
+      "id": 38,
+      "event_type": "sensor",
+      "message": "Humidity reading: 69.0%",
+      "severity": "info",
+      "timestamp": "2024-01-15T16:20:00.000Z"
+    },
+    {
+      "id": 39,
+      "event_type": "alert",
+      "message": "Battery level critical - below 75%",
+      "severity": "warning",
+      "timestamp": "2024-01-15T16:25:00.000Z"
+    },
+    {
+      "id": 40,
+      "event_type": "detection",
+      "message": "Detected 2 Angelfish with 86% confidence",
+      "severity": "info",
+      "timestamp": "2024-01-15T15:25:39.567Z"
+    },
+    {
+      "id": 41,
+      "event_type": "system",
+      "message": "Database backup completed successfully",
+      "severity": "info",
+      "timestamp": "2024-01-15T16:30:00.000Z"
+    }
+  ]
+}
+

@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Fish Analytics - AQUA Monitor{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Fish & Species Analytics</h1>
+    <p>Detailed analysis of detected organisms</p>
+</div>
+
+<div class="content-grid">
+    <div class="card">
+        <h2>Species Distribution (Pie)</h2>
+        <canvas id="species-pie"></canvas>
+    </div>
+    
+    <div class="card">
+        <h2>Detection Trends</h2>
+        <canvas id="detection-trends"></canvas>
+    </div>
+</div>
+
+<div class="card full-width">
+    <h2>Species Statistics</h2>
+    <table id="species-table" class="data-table">
+        <thead>
+            <tr>
+                <th>Species</th>
+                <th>Total Detections</th>
+                <th>Avg Confidence</th>
+                <th>Min Size</th>
+                <th>Max Size</th>
+                <th>Last Seen</th>
+            </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+</div>
+
+<div class="card full-width">
+    <h2>Heatmap - Detection Zones</h2>
+    <canvas id="analytics-heatmap" width="600" height="400"></canvas>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+async function loadAnalytics() {
+    const detectionsRes = await fetch('/api/detections');
+    const detections = detectionsRes.ok ? await detectionsRes.json() : [];
+    
+    // Species stats
+    const speciesStats = {};
+    detections.forEach(d => {
+        if (!speciesStats[d.species]) {
+            speciesStats[d.species] = { count: 0, confidence: [], times: [] };
+        }
+        speciesStats[d.species].count += d.count;
+        speciesStats[d.species].confidence.push(d.confidence);
+        speciesStats[d.species].times.push(new Date(d.timestamp));
+    });
+    
+    // Pie chart
+    const ctx1 = document.getElementById('species-pie').getContext('2d');
+    new Chart(ctx1, {
+        type: 'pie',
+        data: {
+            labels: Object.keys(speciesStats),
+            datasets: [{
+                data: Object.values(speciesStats).map(s => s.count),
+                backgroundColor: ['#0ea5e9', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { labels: { color: '#e5e7eb' } } }
+        }
+    });
+    
+    // Trends chart
+    const hourly = {};
+    detections.forEach(d => {
+        const h = new Date(d.timestamp).getHours();
+        hourly[h] = (hourly[h] || 0) + d.count;
+    });
+    const ctx2 = document.getElementById('detection-trends').getContext('2d');
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: Array.from({length: 24}, (_, i) => i),
+            datasets: [{
+                label: 'Detections',
+                data: Array.from({length: 24}, (_, i) => hourly[i] || 0),
+                backgroundColor: '#0ea5e9'
+            }]
+        },
+        options: {
+            responsive: true,
+            indexAxis: 'x',
+            plugins: { legend: { labels: { color: '#e5e7eb' } } },
+            scales: {
+                y: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } }
+            }
+        }
+    });
+    
+    // Table
+    const tbody = document.getElementById('table-body');
+    tbody.innerHTML = Object.entries(speciesStats).map(([species, stats]) => `
+        <tr>
+            <td>${species}</td>
+            <td>${stats.count}</td>
+            <td>${(stats.confidence.reduce((a, b) => a + b, 0) / stats.confidence.length * 100).toFixed(1)}%</td>
+            <td>-</td>
+            <td>-</td>
+            <td>${stats.times.length > 0 ? new Date(stats.times[stats.times.length - 1]).toLocaleString() : 'N/A'}</td>
+        </tr>
+    `).join('');
+    
+    // Heatmap
+    drawHeatmap(detections);
+}
+
+function drawHeatmap(detections) {
+    const canvas = document.getElementById('analytics-heatmap');
+    const ctx = canvas.getContext('2d');
+    
+    ctx.fillStyle = '#1f2937';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Grid
+    ctx.strokeStyle = '#374151';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 10; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * 60, 0);
+        ctx.lineTo(i * 60, canvas.height);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, i * 40);
+        ctx.lineTo(canvas.width, i * 40);
+        ctx.stroke();
+    }
+    
+    // Detections
+    detections.forEach(d => {
+        const x = (d.x / 100) * canvas.width;
+        const y = (d.y / 100) * canvas.height;
+        ctx.fillStyle = `rgba(14, 165, 233, ${d.confidence * 0.6})`;
+        ctx.beginPath();
+        ctx.arc(x, y, 20, 0, Math.PI * 2);
+        ctx.fill();
+    });
+}
+
+loadAnalytics();
+</script>
+{% endblock %}

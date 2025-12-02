@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}Device Health - AQUA Monitor{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Device Health Monitor</h1>
+    <p>System performance and resource utilization</p>
+</div>
+
+<div class="metrics-grid">
+    <div class="metric-card">
+        <h3>CPU Temperature</h3>
+        <p id="cpu-temp" class="metric-value">--</p>
+        <span class="unit">°C</span>
+    </div>
+    
+    <div class="metric-card">
+        <h3>GPU Temperature</h3>
+        <p id="gpu-temp" class="metric-value">--</p>
+        <span class="unit">°C</span>
+    </div>
+    
+    <div class="metric-card">
+        <h3>Battery</h3>
+        <p id="battery" class="metric-value">--</p>
+        <span class="unit">%</span>
+    </div>
+    
+    <div class="metric-card">
+        <h3>Storage</h3>
+        <p id="storage" class="metric-value">--</p>
+        <span class="unit">%</span>
+    </div>
+</div>
+
+<div class="content-grid">
+    <div class="card">
+        <h2>CPU Usage</h2>
+        <canvas id="cpu-chart"></canvas>
+    </div>
+    
+    <div class="card">
+        <h2>GPU Usage</h2>
+        <canvas id="gpu-chart"></canvas>
+    </div>
+</div>
+
+<div class="content-grid">
+    <div class="card">
+        <h2>RAM Usage</h2>
+        <canvas id="ram-chart"></canvas>
+    </div>
+    
+    <div class="card">
+        <h2>YOLO FPS</h2>
+        <canvas id="fps-chart"></canvas>
+    </div>
+</div>
+
+<div class="card full-width">
+    <h2>System Status</h2>
+    <div id="status-info" class="status-info"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+let cpuChart = null;
+let gpuChart = null;
+let ramChart = null;
+let fpsChart = null;
+
+async function updateHealth() {
+    try {
+        const healthRes = await fetch('/api/health');
+        const health = healthRes.ok ? await healthRes.json() : [];
+        
+        console.log('Health data received:', health.length, 'records');
+        
+        if (health.length > 0) {
+            // Sort by timestamp to ensure latest is last
+            health.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+            const latest = health[health.length - 1];
+            
+            document.getElementById('cpu-temp').textContent = (latest.cpu_temp || 0).toFixed(1);
+            document.getElementById('gpu-temp').textContent = (latest.gpu_temp || 0).toFixed(1);
+            document.getElementById('battery').textContent = (latest.battery_level || 0).toFixed(0);
+            document.getElementById('storage').textContent = (latest.storage_used || 0).toFixed(1);
+            
+            // Status info
+            const statusHtml = `
+                <div class="status-row">
+                    <span>Fan Status:</span> <strong>${latest.fan_status || 'N/A'}</strong>
+                </div>
+                <div class="status-row">
+                    <span>Connectivity:</span> <strong>${latest.connectivity || 'N/A'}</strong>
+                </div>
+                <div class="status-row">
+                    <span>Model:</span> <strong>${latest.model_name || 'N/A'}</strong>
+                </div>
+                <div class="status-row">
+                    <span>Inference FPS:</span> <strong>${(latest.yolo_fps || 0).toFixed(1)} fps</strong>
+                </div>
+            `;
+            document.getElementById('status-info').innerHTML = statusHtml;
+            
+            // Prepare chart data
+            const labels = health.map(h => {
+                const date = new Date(h.timestamp);
+                return date.getHours() + ':' + String(date.getMinutes()).padStart(2, '0');
+            });
+            
+            // Destroy existing charts before creating new ones
+            if (cpuChart) cpuChart.destroy();
+            if (gpuChart) gpuChart.destroy();
+            if (ramChart) ramChart.destroy();
+            if (fpsChart) fpsChart.destroy();
+            
+            // CPU Chart
+            const ctx1 = document.getElementById('cpu-chart').getContext('2d');
+            cpuChart = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'CPU %',
+                        data: health.map(h => h.cpu_usage),
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: { legend: { labels: { color: '#e5e7eb' } } },
+                    scales: {
+                        y: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' }, max: 100 },
+                        x: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } }
+                    }
+                }
+            });
+            
+            // GPU Chart
+            const ctx2 = document.getElementById('gpu-chart').getContext('2d');
+            gpuChart = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'GPU %',
+                        data: health.map(h => h.gpu_usage),
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: { legend: { labels: { color: '#e5e7eb' } } },
+                    scales: {
+                        y: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' }, max: 100 },
+                        x: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } }
+                    }
+                }
+            });
+            
+            // RAM Chart
+            const ctx3 = document.getElementById('ram-chart').getContext('2d');
+            ramChart = new Chart(ctx3, {
+                type: 'area',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'RAM %',
+                        data: health.map(h => h.ram_usage),
+                        borderColor: '#0ea5e9',
+                        backgroundColor: 'rgba(14, 165, 233, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: { legend: { labels: { color: '#e5e7eb' } } },
+                    scales: {
+                        y: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' }, max: 100 },
+                        x: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } }
+                    }
+                }
+            });
+            
+            // FPS Chart
+            const ctx4 = document.getElementById('fps-chart').getContext('2d');
+            fpsChart = new Chart(ctx4, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'YOLO FPS',
+                        data: health.map(h => h.yolo_fps),
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: { legend: { labels: { color: '#e5e7eb' } } },
+                    scales: {
+                        y: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } },
+                        x: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } }
+                    }
+                }
+            });
+        } else {
+            console.warn('No health data available');
+            document.getElementById('status-info').innerHTML = '<p>No health data available. Please seed the database.</p>';
+        }
+    } catch (error) {
+        console.error('Error updating health:', error);
+    }
+}
+
+updateHealth();
+// Auto-refresh disabled - uncomment the line below to enable 5-second auto-refresh
+// setInterval(updateHealth, 5000);
+</script>
+{% endblock %}

@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}Overview - AQUA Monitor{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Dashboard Overview</h1>
+    <p>Real-time monitoring of detections and system status</p>
+</div>
+
+<div class="metrics-grid">
+    <div class="metric-card">
+        <h3>Total Detections Today</h3>
+        <p class="metric-value" id="total-detections">0</p>
+    </div>
+    
+    <div class="metric-card">
+        <h3>Water Temperature</h3>
+        <p class="metric-value" id="water-temp">--</p>
+        <span class="unit">°C</span>
+    </div>
+    
+    <div class="metric-card">
+        <h3>System Status</h3>
+        <p class="metric-status" id="system-status">
+            <span class="status-indicator good"></span> Operational
+        </p>
+    </div>
+    
+    <div class="metric-card">
+        <h3>YOLO FPS</h3>
+        <p class="metric-value" id="yolo-fps">0</p>
+        <span class="unit">fps</span>
+    </div>
+</div>
+
+<div class="content-grid">
+    <div class="card">
+        <h2>Species Distribution</h2>
+        <canvas id="species-chart"></canvas>
+    </div>
+    
+    <div class="card">
+        <h2>Latest Detections</h2>
+        <div class="detection-list">
+            <div id="detection-items"></div>
+        </div>
+    </div>
+</div>
+
+<div class="content-grid">
+    <div class="card">
+        <h2>Detection Timeline</h2>
+        <canvas id="timeline-chart"></canvas>
+    </div>
+    
+    <div class="card">
+        <h2>Heatmap</h2>
+        <canvas id="heatmap-canvas" width="300" height="300"></canvas>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+let speciesChart = null;
+let timelineChart = null;
+
+async function updateOverview() {
+    try {
+        const statsRes = await fetch('/api/stats');
+        const stats = await statsRes.json();
+        
+        document.getElementById('total-detections').textContent = stats.total_detections;
+        
+        if (stats.latest_sensor) {
+            document.getElementById('water-temp').textContent = stats.latest_sensor.temperature.toFixed(1);
+        }
+        
+        if (stats.latest_health) {
+            document.getElementById('yolo-fps').textContent = Math.round(stats.latest_health.yolo_fps);
+        }
+        
+        // Load chart data
+        const detectionsRes = await fetch('/api/detections');
+        const detections = await detectionsRes.json();
+        
+        updateSpeciesChart(detections);
+        updateTimelineChart(detections);
+        updateDetectionList(detections);
+        updateHeatmap(detections);
+    } catch (error) {
+        console.error('Error updating overview:', error);
+    }
+}
+
+function updateSpeciesChart(detections) {
+    const speciesCounts = {};
+    detections.forEach(d => {
+        speciesCounts[d.species] = (speciesCounts[d.species] || 0) + d.count;
+    });
+    
+    const ctx = document.getElementById('species-chart').getContext('2d');
+    if (speciesChart) speciesChart.destroy();
+    
+    speciesChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(speciesCounts),
+            datasets: [{
+                data: Object.values(speciesCounts),
+                backgroundColor: [
+                    '#0ea5e9', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { labels: { color: '#e5e7eb' } }
+            }
+        }
+    });
+}
+
+function updateTimelineChart(detections) {
+    const hourlyData = {};
+    detections.forEach(d => {
+        const hour = new Date(d.timestamp).getHours();
+        hourlyData[hour] = (hourlyData[hour] || 0) + d.count;
+    });
+    
+    const hours = Array.from({length: 24}, (_, i) => i);
+    const counts = hours.map(h => hourlyData[h] || 0);
+    
+    const ctx = document.getElementById('timeline-chart').getContext('2d');
+    if (timelineChart) timelineChart.destroy();
+    
+    timelineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: hours,
+            datasets: [{
+                label: 'Detections per Hour',
+                data: counts,
+                borderColor: '#0ea5e9',
+                backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { labels: { color: '#e5e7eb' } }
+            },
+            scales: {
+                y: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } },
+                x: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } }
+            }
+        }
+    });
+}
+
+function updateDetectionList(detections) {
+    const container = document.getElementById('detection-items');
+    container.innerHTML = detections.slice(0, 5).reverse().map(d => `
+        <div class="detection-item">
+            <span class="species">${d.species}</span>
+            <span class="confidence">${(d.confidence * 100).toFixed(1)}%</span>
+            <span class="time">${new Date(d.timestamp).toLocaleTimeString()}</span>
+        </div>
+    `).join('');
+}
+
+function updateHeatmap(detections) {
+    const canvas = document.getElementById('heatmap-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    ctx.fillStyle = '#1f2937';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    detections.forEach(d => {
+        const x = (d.x / 100) * canvas.width;
+        const y = (d.y / 100) * canvas.height;
+        const intensity = d.confidence;
+        
+        ctx.fillStyle = `rgba(14, 165, 233, ${intensity * 0.7})`;
+        ctx.beginPath();
+        ctx.arc(x, y, 15, 0, Math.PI * 2);
+        ctx.fill();
+    });
+}
+
+updateOverview();
+// Auto-refresh disabled - uncomment the line below to enable 5-second auto-refresh
+// setInterval(updateOverview, 5000);
+</script>
+{% endblock %}

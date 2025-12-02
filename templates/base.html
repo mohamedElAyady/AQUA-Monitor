@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Underwater Monitoring Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="container-wrapper">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo">AQUA</h1>
+                <p class="tagline">Monitor</p>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a href="{{ url_for('overview') }}" class="nav-link {% if request.path == '/overview' %}active{% endif %}">
+                    <span class="icon">📊</span> Overview
+                </a></li>
+                <li><a href="{{ url_for('camera') }}" class="nav-link {% if request.path == '/camera' %}active{% endif %}">
+                    <span class="icon">📹</span> Live Camera
+                </a></li>
+                <li><a href="{{ url_for('analytics') }}" class="nav-link {% if request.path == '/analytics' %}active{% endif %}">
+                    <span class="icon">🐠</span> Fish Analytics
+                </a></li>
+                <li><a href="{{ url_for('environment') }}" class="nav-link {% if request.path == '/environment' %}active{% endif %}">
+                    <span class="icon">🌊</span> Environment
+                </a></li>
+                <li><a href="{{ url_for('health') }}" class="nav-link {% if request.path == '/health' %}active{% endif %}">
+                    <span class="icon">⚙️</span> Device Health
+                </a></li>
+                <li><a href="{{ url_for('logs') }}" class="nav-link {% if request.path == '/logs' %}active{% endif %}">
+                    <span class="icon">📋</span> Logs & Timeline
+                </a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/chart-library.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

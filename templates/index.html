@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Welcome to AQUA Monitor</h1>
+    <p>Underwater Detection and Environmental Monitoring System</p>
+</div>
+
+<div class="hero-section">
+    <div class="hero-card">
+        <h2>Real-time Detection System</h2>
+        <p>YOLO-based object detection for fish species, plants, and coral monitoring</p>
+        <a href="{{ url_for('overview') }}" class="btn btn-primary">View Dashboard</a>
+    </div>
+    
+    <div class="hero-card">
+        <h2>Environmental Sensors</h2>
+        <p>Monitor water temperature, humidity, pressure, pH, and more in real-time</p>
+        <a href="{{ url_for('environment') }}" class="btn btn-primary">Check Sensors</a>
+    </div>
+    
+    <div class="hero-card">
+        <h2>Device Monitoring</h2>
+        <p>Track CPU, GPU, battery, storage, and YOLO inference performance</p>
+        <a href="{{ url_for('health') }}" class="btn btn-primary">View Health</a>
+    </div>
+</div>
+
+<div class="action-section">
+    <p>Need sample data? <a href="#" onclick="seedDatabase()" class="link">Generate test data</a></p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function seedDatabase() {
+    fetch('/api/seed', { method: 'POST' })
+        .then(r => r.json())
+        .then(data => {
+            alert('Database seeded with sample data!');
+            setTimeout(() => window.location.href = '/overview', 500);
+        });
+}
+</script>
+{% endblock %}

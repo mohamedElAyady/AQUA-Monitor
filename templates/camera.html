@@ -1,0 +1,398 @@
+{% extends "base.html" %}
+
+{% block title %}Live Camera - Underwater Monitoring Dashboard{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+    .camera-page {
+        padding: 20px;
+    }
+    .camera-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .camera-stats {
+        display: flex;
+        gap: 20px;
+    }
+    .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .stat-label {
+        font-size: 12px;
+        color: #9ca3af;
+    }
+    .stat-value {
+        font-size: 24px;
+        font-weight: bold;
+        color: #0ea5e9;
+    }
+    .camera-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    .feed-wrapper {
+        position: relative;
+        background: #0a0e27;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .camera-feed {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+    .loading-indicator {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: #fff;
+    }
+    .detection-panel {
+        background: #1f2937;
+        border-radius: 8px;
+        padding: 20px;
+    }
+    .panel-header h2 {
+        margin: 0 0 15px 0;
+        color: #e5e7eb;
+    }
+    .detection-list {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    .detection-item {
+        background: #374151;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+    }
+    .detection-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+    .detection-name {
+        font-weight: bold;
+        color: #0ea5e9;
+    }
+    .detection-confidence {
+        color: #10b981;
+    }
+    .detection-coords {
+        font-size: 12px;
+        color: #9ca3af;
+    }
+    .camera-controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    .location-map-container {
+        background: #1f2937;
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+    .location-map-container h2 {
+        margin: 0 0 15px 0;
+        color: #e5e7eb;
+    }
+    #locationMap {
+        height: 400px;
+        width: 100%;
+        border-radius: 4px;
+    }
+    .location-info {
+        margin-top: 15px;
+        color: #9ca3af;
+    }
+    .location-info strong {
+        color: #e5e7eb;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="camera-page">
+    <div class="camera-header">
+        <h1>Live Camera Feed</h1>
+        <div class="camera-stats">
+            <div class="stat-item">
+                <span class="stat-label">Frame</span>
+                <span class="stat-value" id="frameCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Detections</span>
+                <span class="stat-value" id="detectionCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Status</span>
+                <span class="stat-value" id="statusIndicator">●</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="camera-container">
+        <!-- Camera Feed Canvas -->
+        <div class="feed-wrapper">
+            <canvas id="cameraCanvas" class="camera-feed"></canvas>
+            <div class="loading-indicator" id="loadingIndicator">
+                <div class="spinner"></div>
+                <p>Loading camera feed...</p>
+            </div>
+        </div>
+
+        <!-- Detection List -->
+        <div class="detection-panel">
+            <div class="panel-header">
+                <h2>Active Detections</h2>
+            </div>
+            <div class="detection-list" id="detectionList">
+                <p class="empty-state">No detections yet</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Location Map -->
+    <div class="location-map-container">
+        <h2>Camera Location</h2>
+        <div id="locationMap"></div>
+        <div class="location-info" id="locationInfo">
+            <p><strong>Region:</strong> <span id="regionName">Loading...</span></p>
+            <p><strong>Coordinates:</strong> <span id="coordinates">Loading...</span></p>
+            <p><strong>Depth:</strong> <span id="depth">Loading...</span></p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    // Initialize map
+    let map = null;
+    let locationMarker = null;
+
+    async function loadLocation() {
+        try {
+            const res = await fetch('/api/camera/location');
+            const location = await res.json();
+            
+            // Initialize map if not already done
+            if (!map) {
+                map = L.map('locationMap').setView([location.latitude, location.longitude], 10);
+                
+                // Add OpenStreetMap tiles
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors',
+                    maxZoom: 18
+                }).addTo(map);
+            }
+            
+            // Add or update marker
+            if (locationMarker) {
+                locationMarker.setLatLng([location.latitude, location.longitude]);
+            } else {
+                // Custom underwater icon
+                const underwaterIcon = L.divIcon({
+                    className: 'underwater-marker',
+                    html: '<div style="background: #0ea5e9; width: 20px; height: 20px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 10px rgba(14, 165, 233, 0.5);"></div>',
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 10]
+                });
+                
+                locationMarker = L.marker([location.latitude, location.longitude], {
+                    icon: underwaterIcon
+                }).addTo(map);
+                
+                // Add popup
+                locationMarker.bindPopup(`
+                    <strong>${location.name}</strong><br>
+                    Depth: ${location.depth}m<br>
+                    ${location.region}
+                `).openPopup();
+            }
+            
+            // Update info display
+            document.getElementById('regionName').textContent = location.region;
+            document.getElementById('coordinates').textContent = 
+                `${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}`;
+            document.getElementById('depth').textContent = `${location.depth}m`;
+            
+        } catch (error) {
+            console.error('Error loading location:', error);
+            document.getElementById('locationInfo').innerHTML = 
+                '<p style="color: #ef4444;">Error loading location data</p>';
+        }
+    }
+
+    // Load location on page load
+    loadLocation();
+</script>
+<script>
+    const canvas = document.getElementById('cameraCanvas');
+    const ctx = canvas.getContext('2d');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const statusIndicator = document.getElementById('statusIndicator');
+    const frameCountDisplay = document.getElementById('frameCount');
+    const detectionCountDisplay = document.getElementById('detectionCount');
+    const detectionList = document.getElementById('detectionList');
+
+    let videoStream = null;
+    let video = null;
+    let frameNumber = 0;
+    let currentDetections = [];
+    let animationId = null;
+
+    // Set canvas size
+    function resizeCanvas() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+    }
+
+    // Draw camera feed with detection boxes
+    function drawCameraFeed() {
+        if (video && video.readyState === video.HAVE_ENOUGH_DATA) {
+            // Draw video frame to canvas
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Draw detection boxes on top
+            drawDetectionBoxes(canvas.width, canvas.height);
+            
+            frameNumber++;
+        }
+    }
+
+    function drawDetectionBoxes(width, height) {
+        currentDetections.forEach((detection, index) => {
+            const x = detection.x;
+            const y = detection.y;
+            const w = detection.width;
+            const h = detection.height;
+
+            // Draw bounding box
+            ctx.strokeStyle = '#00ff88';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x, y, w, h);
+
+            // Draw label background
+            ctx.fillStyle = '#00ff88';
+            ctx.fillRect(x, y - 25, Math.max(120, detection.species.length * 8 + 40), 22);
+
+            // Draw label text
+            ctx.fillStyle = '#000';
+            ctx.font = 'bold 12px Arial';
+            ctx.fillText(
+                `${detection.species} (${Math.round(detection.confidence * 100)}%)`,
+                x + 5,
+                y - 8
+            );
+        });
+    }
+
+    function generateRandomDetections() {
+        const species = ['Clownfish', 'Angelfish', 'Turtle', 'Shark', 'Manta Ray', 'Grouper'];
+        const numDetections = Math.random() > 0.7 ? Math.floor(Math.random() * 3) + 1 : 0;
+        
+        currentDetections = [];
+        for (let i = 0; i < numDetections; i++) {
+            currentDetections.push({
+                species: species[Math.floor(Math.random() * species.length)],
+                confidence: Math.random() * 0.3 + 0.7,
+                x: Math.random() * (canvas.width - 100) + 20,
+                y: Math.random() * (canvas.height - 100) + 20,
+                width: 80 + Math.random() * 40,
+                height: 60 + Math.random() * 40
+            });
+        }
+    }
+
+    function updateDetectionList() {
+        if (currentDetections.length === 0) {
+            detectionList.innerHTML = '<p class="empty-state">No detections</p>';
+            return;
+        }
+
+        detectionList.innerHTML = currentDetections.map((det, idx) => `
+            <div class="detection-item">
+                <div class="detection-header">
+                    <span class="detection-name">${det.species}</span>
+                    <span class="detection-confidence">${Math.round(det.confidence * 100)}%</span>
+                </div>
+                <div class="detection-coords">
+                    X: ${Math.round(det.x)}, Y: ${Math.round(det.y)}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function animate() {
+        generateRandomDetections();
+        drawCameraFeed();
+        updateDetectionList();
+        
+        frameCountDisplay.textContent = frameNumber;
+        detectionCountDisplay.textContent = currentDetections.length;
+        
+        animationId = requestAnimationFrame(animate);
+    }
+
+    async function startCamera() {
+        try {
+            // Request access to laptop camera
+            videoStream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 },
+                    facingMode: 'user' // Use front-facing camera (laptop camera)
+                }
+            });
+            
+            // Create video element to capture stream
+            video = document.createElement('video');
+            video.srcObject = videoStream;
+            video.autoplay = true;
+            video.playsInline = true;
+            
+            // Wait for video to be ready
+            video.addEventListener('loadedmetadata', () => {
+                resizeCanvas();
+                loadingIndicator.style.display = 'none';
+                statusIndicator.style.color = '#00ff88';
+                animate();
+            });
+            
+        } catch (error) {
+            console.error('Error accessing camera:', error);
+            loadingIndicator.innerHTML = `
+                <div class="spinner"></div>
+                <p style="color: #ef4444;">Error accessing camera: ${error.message}</p>
+                <p style="color: #9ca3af; font-size: 12px;">Please allow camera access in your browser settings</p>
+            `;
+            statusIndicator.style.color = '#ef4444';
+        }
+    }
+
+    window.addEventListener('resize', () => {
+        resizeCanvas();
+    });
+
+    // Initialize and start camera automatically
+    resizeCanvas();
+    startCamera();
+    
+</script>
+{% endblock %}
